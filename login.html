@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Cartly</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="animations.css">
+</head>
+<body>
+
+<div class="auth-page">
+  <!-- Visual Side -->
+  <div class="auth-visual">
+    <div class="auth-visual-content">
+      <h2>Cart Daily. Upgrade your phone life.</h2>
+      <p>From chargers to case, everything your device needs.</p>
+    </div>
+  </div>
+
+  <!-- Form Side -->
+  <div class="auth-form-side">
+        <img src="./logo.png.png" alt="Cartly" style="height:140px;width:250px;margin-left:195px;">
+
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="showTab('login')">Login</button>
+      <button class="auth-tab" id="tab-register" onclick="showTab('register')">Register</button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div id="form-login">
+      <div style="margin-bottom:28px">
+        <h2 style="font-family:var(--font-display);font-size:28px;font-weight:900;margin-bottom:6px">Welcome back</h2>
+        <p style="color:var(--text-muted);font-size:14px;font-weight:300">Sign in to your account to continue</p>
+      </div>
+      <div id="login-alert"></div>
+
+      <!-- Google Login Button -->
+      <a href="http://localhost:5000/api/auth/google" class="btn-google">
+        <svg width="20" height="20" viewBox="0 0 48 48" style="margin-right:10px">
+          <path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34.5 6.5 29.5 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.9z"/>
+          <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 13 24 13c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34.5 6.5 29.5 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/>
+          <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.3 35.3 26.8 36 24 36c-5.2 0-9.7-3.3-11.3-8H6.3C9.6 35.6 16.3 44 24 44z"/>
+          <path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.3 4.1-4.1 5.5l6.2 5.2C41 35.8 44 30.3 44 24c0-1.3-.1-2.7-.4-3.9z"/>
+        </svg>
+        Continue with Google
+      </a>
+
+      <div class="auth-divider"><span>or</span></div>
+
+      <div class="form-group">
+        <label class="form-label">Email address</label>
+        <input type="email" class="form-input" id="login-email" placeholder="you@example.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="login-password" placeholder="Your password" autocomplete="current-password"
+          onkeydown="if(event.key==='Enter') login()">
+      </div>
+      <button class="btn-primary w-full" style="border-radius:var(--radius-sm);justify-content:center" onclick="login()" id="login-btn">
+        Sign In →
+      </button>
+      <p style="text-align:center;margin-top:20px;color:var(--text-muted);font-size:14px">
+        Don't have an account? 
+        <a href="#" onclick="showTab('register')" style="color:var(--primary);text-decoration:none;font-weight:600">Create one</a>
+      </p>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div id="form-register" style="display:none">
+      <div style="margin-bottom:28px">
+        <h2 style="font-family:var(--font-display);font-size:28px;font-weight:900;margin-bottom:6px">Create account</h2>
+        <p style="color:var(--text-muted);font-size:14px;font-weight:300">Start your shopping journey today</p>
+      </div>
+      <div id="register-alert"></div>
+
+      <!-- Google Register Button -->
+      <a href="http://localhost:5000/api/auth/google" class="btn-google">
+        <svg width="20" height="20" viewBox="0 0 48 48" style="margin-right:10px">
+          <path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34.5 6.5 29.5 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.9z"/>
+          <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 13 24 13c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34.5 6.5 29.5 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/>
+          <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.3 35.3 26.8 36 24 36c-5.2 0-9.7-3.3-11.3-8H6.3C9.6 35.6 16.3 44 24 44z"/>
+          <path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.3 4.1-4.1 5.5l6.2 5.2C41 35.8 44 30.3 44 24c0-1.3-.1-2.7-.4-3.9z"/>
+        </svg>
+        Sign up with Google
+      </a>
+
+      <div class="auth-divider"><span>or</span></div>
+
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" class="form-input" id="reg-name" placeholder="John Dela Cruz" autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email address</label>
+        <input type="email" class="form-input" id="reg-email" placeholder="you@example.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="reg-password" placeholder="At least 6 characters" autocomplete="new-password">
+        <div id="pw-strength" style="margin-top:8px;height:4px;border-radius:2px;background:var(--bg3);overflow:hidden">
+          <div id="pw-bar" style="height:100%;width:0;transition:all 0.3s;border-radius:2px"></div>
+        </div>
+      </div>
+      <button class="btn-primary w-full" style="border-radius:var(--radius-sm);justify-content:center" onclick="register()" id="register-btn">
+        Create Account →
+      </button>
+      <p style="text-align:center;margin-top:20px;color:var(--text-muted);font-size:14px">
+        Already have an account? 
+        <a href="#" onclick="showTab('login')" style="color:var(--primary);text-decoration:none;font-weight:600">Sign in</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .btn-google {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px 20px;
+    background: #fff;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+    margin-bottom: 16px;
+  }
+  .btn-google:hover {
+    background: #f5f5f5;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  .auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 16px 0;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  .auth-divider::before,
+  .auth-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--bg3);
+  }
+</style>
+
+<script src="app.js"></script>
+<script>
+  // Redirect if already logged in
+  if (getToken()) window.location.href = 'index.html';
+
+  // Handle Google OAuth callback token in URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const googleToken = urlParams.get('token');
+  const googleUser = urlParams.get('user');
+  if (googleToken) {
+    localStorage.setItem('cartly_token', googleToken);
+    if (googleUser) localStorage.setItem('cartly_user', decodeURIComponent(googleUser));
+    window.location.href = 'index.html';
+  }
+
+  // Check URL param for tab
+  const urlTab = urlParams.get('tab');
+  if (urlTab === 'register') showTab('register');
+
+  function showTab(tab) {
+    document.getElementById('form-login').style.display = tab === 'login' ? 'block' : 'none';
+    document.getElementById('form-register').style.display = tab === 'register' ? 'block' : 'none';
+    document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+    document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+  }
+
+  // Password strength indicator
+  document.getElementById('reg-password')?.addEventListener('input', function() {
+    const val = this.value;
+    const bar = document.getElementById('pw-bar');
+    let strength = 0;
+    if (val.length >= 6) strength++;
+    if (val.length >= 10) strength++;
+    if (/[A-Z]/.test(val)) strength++;
+    if (/[0-9]/.test(val)) strength++;
+    if (/[^A-Za-z0-9]/.test(val)) strength++;
+    const colors = ['', '#ff4d6d', '#ffd166', '#f0a500', '#00e5a0'];
+    const widths = ['0%', '20%', '40%', '70%', '100%'];
+    bar.style.width = widths[strength] || '0%';
+    bar.style.background = colors[strength] || 'transparent';
+  });
+
+  function setLoading(btnId, loading) {
+    const btn = document.getElementById(btnId);
+    btn.disabled = loading;
+    btn.textContent = loading ? 'Please wait...' : (btnId === 'login-btn' ? 'Sign In →' : 'Create Account →');
+  }
+
+  function showAlert(id, msg, type) {
+    document.getElementById(id).innerHTML = `
+      <div style="background:${type==='error'?'rgba(255,77,109,0.1)':'rgba(0,229,160,0.1)'};
+        border:1px solid ${type==='error'?'rgba(255,77,109,0.3)':'rgba(0,229,160,0.3)'};
+        color:${type==='error'?'var(--error)':'var(--success)'};
+        padding:12px 16px;border-radius:var(--radius-sm);font-size:14px;margin-bottom:16px">
+        ${type==='error'?'❌':'✅'} ${msg}
+      </div>`;
+  }
+
+  async function login() {
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    if (!email || !password) return showAlert('login-alert', 'Please fill in all fields.', 'error');
+
+    setLoading('login-btn', true);
+    try {
+      const res = await fetch(`${API}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (data.token) {
+        localStorage.setItem('cartly_token', data.token);
+        localStorage.setItem('cartly_user', JSON.stringify(data.user));
+        showAlert('login-alert', `Welcome back, ${data.user.name.split(' ')[0]}! Redirecting...`, 'success');
+        setTimeout(() => window.location.href = 'index.html', 1000);
+      } else {
+        showAlert('login-alert', data.message || 'Login failed.', 'error');
+        setLoading('login-btn', false);
+      }
+    } catch {
+      showAlert('login-alert', 'Network error. Please try again.', 'error');
+      setLoading('login-btn', false);
+    }
+  }
+
+  async function register() {
+    const name = document.getElementById('reg-name').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const password = document.getElementById('reg-password').value;
+    if (!name || !email || !password) return showAlert('register-alert', 'Please fill in all fields.', 'error');
+    if (password.length < 6) return showAlert('register-alert', 'Password must be at least 6 characters.', 'error');
+
+    setLoading('register-btn', true);
+    try {
+      const res = await fetch(`${API}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password })
+      });
+      const data = await res.json();
+      if (res.ok && data.token) {
+        localStorage.setItem('cartly_token', data.token);
+        localStorage.setItem('cartly_user', JSON.stringify(data.user));
+        showAlert('register-alert', `Welcome to Cartly, ${data.user.name.split(' ')[0]}! 🎉`, 'success');
+        setTimeout(() => window.location.href = 'index.html', 1000);
+      } else {
+        showAlert('register-alert', data.message || 'Registration failed.', 'error');
+        setLoading('register-btn', false);
+      }
+    } catch {
+      showAlert('register-alert', 'Network error. Please try again.', 'error');
+      setLoading('register-btn', false);
+    }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile | Cartly</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="animations.css">
+  <style>
+    .profile-page { min-height: 100vh; background: var(--bg1); padding-bottom: 80px; }
+    .profile-hero { background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%); border-bottom: 1px solid var(--bg3); padding: 60px 5% 40px; margin-bottom: 40px; }
+    .profile-hero-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; gap: 30px; }
+    .profile-avatar { width: 90px; height: 90px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), #e6920a); display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 900; color: #000; flex-shrink: 0; border: 3px solid rgba(245,166,35,0.3); box-shadow: 0 0 30px rgba(245,166,35,0.2); }
+    .profile-hero-info h1 { font-family: var(--font-display); font-size: 28px; font-weight: 900; color: var(--text); margin-bottom: 4px; }
+    .profile-hero-info p { color: var(--text-muted); font-size: 15px; }
+    .profile-badge { display: inline-block; background: rgba(245,166,35,0.15); border: 1px solid rgba(245,166,35,0.3); color: var(--primary); padding: 3px 12px; border-radius: 50px; font-size: 12px; font-weight: 600; margin-top: 8px; }
+    .profile-content { max-width: 900px; margin: 0 auto; padding: 0 5%; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .profile-card { background: var(--bg2); border: 1px solid var(--bg3); border-radius: var(--radius); padding: 28px; transition: border-color 0.2s; }
+    .profile-card:hover { border-color: rgba(245,166,35,0.2); }
+    .profile-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .profile-card-icon { width: 36px; height: 36px; background: rgba(245,166,35,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .profile-card-title { font-size: 15px; font-weight: 700; color: var(--text); }
+    .profile-field { margin-bottom: 14px; }
+    .profile-field label { display: block; font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .profile-field p { font-size: 15px; color: var(--text); font-weight: 500; }
+    .profile-field input { width: 100%; background: var(--bg3); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-sm); padding: 10px 14px; color: var(--text); font-size: 14px; font-family: inherit; display: none; }
+    .profile-field input:focus { outline: none; border-color: var(--primary); }
+    .profile-field.editing input { display: block; }
+    .profile-field.editing p { display: none; }
+    .btn-danger { background: rgba(255,77,109,0.1); border: 1px solid rgba(255,77,109,0.3); color: var(--error); padding: 12px 24px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+    .btn-danger:hover { background: rgba(255,77,109,0.2); }
+    .btn-outline { background: transparent; border: 1px solid var(--bg3); color: var(--text-muted); padding: 12px 24px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+    .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+    .stat-row { display: flex; gap: 16px; margin-top: 4px; }
+    .stat-item { flex: 1; background: var(--bg3); border-radius: var(--radius-sm); padding: 12px; text-align: center; }
+    .stat-item .num { font-size: 22px; font-weight: 900; color: var(--primary); font-family: var(--font-display); }
+    .stat-item .lbl { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .security-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--bg3); }
+    .security-item:last-child { border-bottom: none; }
+    .security-item-label { font-size: 14px; color: var(--text-muted); }
+    .security-item-value { font-size: 14px; font-weight: 600; color: var(--text); }
+    .badge-green { background: rgba(0,229,160,0.1); border: 1px solid rgba(0,229,160,0.3); color: var(--success); padding: 2px 10px; border-radius: 50px; font-size: 12px; }
+    @media(max-width: 680px) { .profile-content { grid-template-columns: 1fr; } .profile-hero-inner { flex-direction: column; text-align: center; } }
+  </style>
+</head>
+<body class="profile-page">
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a class="nav-brand" href="index.html">
+    <img src="./logo.png.png" alt="Cartly" style="height:90px;width:auto;vertical-align:middle;margin-left:100px;">
+     
+  </a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#products">Shop</a></li>
+    <li><a href="cart.html">Cart 🛒</a></li>
+    <li><a href="orders.html">Orders</a></li>
+    <li id="nav-auth"></li>
+  </ul>
+  <button class="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- PROFILE HERO -->
+<div class="profile-hero">
+  <div class="profile-hero-inner">
+    <div class="profile-avatar" id="profile-avatar">?</div>
+    <div class="profile-hero-info">
+      <h1 id="profile-name">Loading...</h1>
+      <p id="profile-email">—</p>
+      <div class="profile-badge" id="profile-role">Member</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE CONTENT -->
+<div class="profile-content">
+
+  <div class="profile-card">
+    <div class="profile-card-header">
+      <div class="profile-card-icon">👤</div>
+      <div class="profile-card-title">Account Info</div>
+    </div>
+    <div class="profile-field" id="field-name">
+      <label>Full Name</label>
+      <p id="display-name">—</p>
+      <input type="text" id="input-name" placeholder="Your full name">
+    </div>
+    <div class="profile-field" id="field-email">
+      <label>Email Address</label>
+      <p id="display-email">—</p>
+      <input type="email" id="input-email" placeholder="Your email">
+    </div>
+    <div style="margin-top:16px;display:flex;gap:10px">
+      <button class="btn-primary" style="padding:10px 20px;font-size:13px;border-radius:var(--radius-sm)" id="edit-btn" onclick="toggleEdit()">✏️ Edit Profile</button>
+      <button class="btn-outline" id="save-btn" onclick="saveProfile()" style="display:none;padding:10px 20px;font-size:13px">💾 Save Changes</button>
+    </div>
+  </div>
+
+  <div class="profile-card">
+    <div class="profile-card-header">
+      <div class="profile-card-icon">📦</div>
+      <div class="profile-card-title">My Orders</div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-item"><div class="num" id="stat-total">0</div><div class="lbl">Total Orders</div></div>
+      <div class="stat-item"><div class="num" id="stat-pending">0</div><div class="lbl">Pending</div></div>
+      <div class="stat-item"><div class="num" id="stat-delivered">0</div><div class="lbl">Delivered</div></div>
+    </div>
+    <a href="orders.html" class="btn-primary" style="display:inline-flex;margin-top:20px;padding:10px 20px;font-size:13px;border-radius:var(--radius-sm);text-decoration:none">View My Orders →</a>
+  </div>
+
+  <div class="profile-card">
+    <div class="profile-card-header">
+      <div class="profile-card-icon">🔒</div>
+      <div class="profile-card-title">Security</div>
+    </div>
+    <div class="security-item"><span class="security-item-label">Password</span><span class="security-item-value">••••••••</span></div>
+    <div class="security-item"><span class="security-item-label">Account Status</span><span class="badge-green">✅ Active</span></div>
+    <div class="security-item"><span class="security-item-label">Login Method</span><span class="security-item-value" id="login-method">Email</span></div>
+  </div>
+
+  <div class="profile-card">
+    <div class="profile-card-header">
+      <div class="profile-card-icon">⚙️</div>
+      <div class="profile-card-title">Account Actions</div>
+    </div>
+    <p style="color:var(--text-muted);font-size:14px;margin-bottom:20px">Manage your account settings and session.</p>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button class="btn-outline" onclick="window.location.href='orders.html'" style="text-align:left;padding:12px 16px">📦 View Order History</button>
+      <button class="btn-outline" onclick="window.location.href='cart.html'" style="text-align:left;padding:12px 16px">🛒 Go to Cart</button>
+      <button class="btn-danger" onclick="logout()" style="text-align:left;padding:12px 16px">🚪 Logout</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="app.js"></script>
+<script>
+  if (!getToken()) window.location.href = 'login.html';
+  const user = getUser();
+  let isEditing = false;
+
+  function loadProfile() {
+    if (!user) return;
+    const initial = user.name ? user.name.charAt(0).toUpperCase() : '?';
+    document.getElementById('profile-avatar').textContent = initial;
+    document.getElementById('profile-name').textContent = user.name || '—';
+    document.getElementById('profile-email').textContent = user.email || '—';
+    document.getElementById('profile-role').textContent = user.isAdmin ? '⭐ Admin' : '🛍️ Member';
+    document.getElementById('display-name').textContent = user.name || '—';
+    document.getElementById('display-email').textContent = user.email || '—';
+    document.getElementById('input-name').value = user.name || '';
+    document.getElementById('input-email').value = user.email || '';
+  }
+
+  async function loadOrderStats() {
+    try {
+      const res = await fetch(`${API}/orders/myorders`, { headers: authHeaders() });
+      const data = await res.json();
+      const orders = Array.isArray(data) ? data : [];
+      // Exclude cancelled from total count
+      const activeOrders = orders.filter(o => o.status !== 'cancelled');
+      document.getElementById('stat-total').textContent = activeOrders.length;
+      document.getElementById('stat-pending').textContent = activeOrders.filter(o => o.status === 'pending' || o.status === 'processing').length;
+      document.getElementById('stat-delivered').textContent = activeOrders.filter(o => o.status === 'delivered').length;
+    } catch {}
+  }
+
+  function toggleEdit() {
+    isEditing = !isEditing;
+    ['field-name', 'field-email'].forEach(id => {
+      document.getElementById(id).classList.toggle('editing', isEditing);
+    });
+    document.getElementById('edit-btn').style.display = isEditing ? 'none' : 'inline-flex';
+    document.getElementById('save-btn').style.display = isEditing ? 'inline-flex' : 'none';
+  }
+
+  async function saveProfile() {
+    const name = document.getElementById('input-name').value.trim();
+    const email = document.getElementById('input-email').value.trim();
+    if (!name || !email) return toast('Please fill in all fields.', 'error');
+    try {
+      const res = await fetch(`${API}/auth/me`, { method: 'PUT', headers: authHeaders(), body: JSON.stringify({ name, email }) });
+      const data = await res.json();
+      if (res.ok) {
+        const updatedUser = { ...user, name, email };
+        localStorage.setItem('cartly_user', JSON.stringify(updatedUser));
+        toast('Profile updated! ✅', 'success');
+        toggleEdit();
+        loadProfile();
+      } else {
+        toast(data.message || 'Update failed.', 'error');
+      }
+    } catch { toast('Network error. Please try again.', 'error'); }
+  }
+
+  loadProfile();
+  loadOrderStats();
+</script>
+</body>
+</html>

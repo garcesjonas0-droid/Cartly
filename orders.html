@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Orders | Cartly</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="animations.css">
+  <style>
+    .filter-tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .filter-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 18px;
+      border-radius: 50px;
+      border: 1px solid var(--bg3);
+      background: var(--bg2);
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      white-space: nowrap;
+      line-height: 1;
+    }
+
+    .filter-tab:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .filter-tab.active {
+      background: var(--primary);
+      color: #000;
+      border-color: var(--primary);
+    }
+
+    .btn-cancel-order {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255,77,109,0.3);
+      background: rgba(255,77,109,0.08);
+      color: var(--error);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .btn-cancel-order:hover {
+      background: rgba(255,77,109,0.18);
+      border-color: rgba(255,77,109,0.5);
+    }
+
+    .btn-cancel-order:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .order-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--bg3);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    /* ── ORDER CARD REMOVE ANIMATION ── */
+    .order-card.removing {
+      opacity: 0;
+      transform: translateX(40px) scale(0.97);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      pointer-events: none;
+    }
+
+    .confirm-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .confirm-overlay.open { display: flex; }
+
+    .confirm-box {
+      background: var(--bg2);
+      border: 1px solid var(--bg3);
+      border-radius: var(--radius);
+      padding: 32px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .confirm-box h3 { font-size: 20px; font-weight: 800; margin-bottom: 10px; color: var(--text); }
+    .confirm-box p { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; line-height: 1.6; }
+
+    .confirm-actions { display: flex; gap: 12px; justify-content: center; }
+
+    .btn-confirm-cancel {
+      padding: 12px 24px;
+      border-radius: var(--radius-sm);
+      background: var(--error);
+      color: #fff;
+      border: none;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: opacity 0.2s;
+    }
+
+    .btn-confirm-cancel:hover { opacity: 0.85; }
+
+    .btn-keep {
+      padding: 12px 24px;
+      border-radius: var(--radius-sm);
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--bg3);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    .btn-keep:hover { border-color: var(--primary); color: var(--primary); }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-brand" href="index.html">
+    <img src="./logo.png.png" alt="Cartly" style="height:90px;width:auto;vertical-align:middle;margin-left:100px;">
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#products">Shop</a></li>
+    <li><a href="cart.html">
+      <span class="cart-badge">Cart 🛒<span class="cart-count" style="display:none">0</span></span>
+    </a></li>
+    <li><a href="orders.html" class="active">Orders</a></li>
+    <li id="nav-auth"></li>
+  </ul>
+  <button class="hamburger"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="page-container">
+  <div class="page-header" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px">
+    <div>
+      <h1 class="page-title">My Orders</h1>
+      <p class="page-sub" id="orders-sub">Loading your order history...</p>
+    </div>
+    <a href="index.html#products" class="btn-primary" style="font-size:14px;padding:12px 24px">+ Shop More</a>
+  </div>
+
+  <div class="filter-tabs">
+    <button class="filter-tab active" id="filter-all" onclick="filterOrders('all')">📋 All Orders</button>
+    <button class="filter-tab" id="filter-pending" onclick="filterOrders('pending')">⏳ Pending</button>
+    <button class="filter-tab" id="filter-processing" onclick="filterOrders('processing')">🔄 Processing</button>
+    <button class="filter-tab" id="filter-shipped" onclick="filterOrders('shipped')">🚚 Shipped</button>
+    <button class="filter-tab" id="filter-delivered" onclick="filterOrders('delivered')">✅ Delivered</button>
+    <button class="filter-tab" id="filter-cancelled" onclick="filterOrders('cancelled')">❌ Cancelled</button>
+  </div>
+
+  <div id="orders-list">
+    <div style="text-align:center;padding:60px">
+      <div class="loader"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Cancel Confirm Modal -->
+<div class="confirm-overlay" id="cancel-modal">
+  <div class="confirm-box">
+    <div style="font-size:48px;margin-bottom:16px">🗑️</div>
+    <h3>Cancel this order?</h3>
+    <p>This action cannot be undone. Your order will be removed from your active orders.</p>
+    <div class="confirm-actions">
+      <button class="btn-keep" onclick="closeCancelModal()">Keep Order</button>
+      <button class="btn-confirm-cancel" id="confirm-cancel-btn" onclick="confirmCancel()">Yes, Cancel It</button>
+    </div>
+  </div>
+</div>
+
+<footer style="padding:30px 5%;background:var(--bg2);border-top:1px solid var(--border)">
+  <div class="footer-bottom" style="border:none;padding:0">
+    <span>© 2026 <strong style="color:var(--primary)">Cartly</strong>. All rights reserved.</span>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+  if (!getToken()) {
+    toast('Please login to view your orders.', 'info');
+    setTimeout(() => window.location.href = 'login.html', 1500);
+  }
+
+  let allOrders = [];
+  let activeFilter = 'all';
+  let orderToCancel = null;
+
+  async function loadOrders() {
+    try {
+      const res = await fetch(`${API}/orders/myorders`, { headers: authHeaders() });
+      if (res.status === 401) { logout(); return; }
+      allOrders = await res.json();
+      // By default hide cancelled orders from "all" view
+      updateOrderCount();
+      renderOrders();
+    } catch {
+      document.getElementById('orders-list').innerHTML =
+        emptyState('⚠️', 'Failed to load orders', 'Check your connection and try again.', '', '');
+    }
+  }
+
+  function updateOrderCount() {
+    // Count only non-cancelled for the subtitle
+    const active = allOrders.filter(o => o.status !== 'cancelled');
+    document.getElementById('orders-sub').textContent =
+      `${active.length} order${active.length !== 1 ? 's' : ''} total`;
+  }
+
+  function filterOrders(status) {
+    activeFilter = status;
+    document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+    document.getElementById(`filter-${status}`)?.classList.add('active');
+    renderOrders();
+  }
+
+  function renderOrders() {
+    let filtered;
+
+    if (activeFilter === 'all') {
+      // "All Orders" hides cancelled — they only show under the Cancelled tab
+      filtered = allOrders.filter(o => o.status !== 'cancelled');
+    } else {
+      filtered = allOrders.filter(o => o.status === activeFilter);
+    }
+
+    const list = document.getElementById('orders-list');
+
+    if (filtered.length === 0) {
+      list.innerHTML = emptyState('📦',
+        activeFilter === 'all' ? 'No active orders' : `No ${activeFilter} orders`,
+        activeFilter === 'all' ? 'Start shopping and your orders will appear here.' : 'No orders with this status.',
+        'Start Shopping →', 'index.html#products');
+      return;
+    }
+
+    list.innerHTML = filtered.map(order => {
+      const productNames = order.products.map(p =>
+        p.product ? `${p.product.name} ×${p.quantity}` : `Item ×${p.quantity}`
+      );
+
+      const canCancel = order.status === 'pending' || order.status === 'processing';
+
+      return `
+        <div class="order-card" id="order-${order._id}">
+          <div class="order-header">
+            <div>
+              <div class="order-id">Order #${order._id.slice(-8).toUpperCase()}</div>
+              <div class="order-date">📅 ${fmtDate(order.createdAt)}</div>
+              ${order.shippingAddress ? `<div style="font-size:13px;color:var(--text-dim);margin-top:4px">📍 ${order.shippingAddress}</div>` : ''}
+            </div>
+            ${statusChip(order.status)}
+          </div>
+
+          ${productNames.length > 0 ? `
+          <div class="order-products">
+            ${productNames.map(n => `<span class="order-product-chip">🛍️ ${n}</span>`).join('')}
+          </div>` : ''}
+
+          <div class="order-actions">
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <div style="font-size:13px;color:var(--text-muted)">${order.products.length} item${order.products.length !== 1 ? 's' : ''}</div>
+              ${order.paymentMethod ? `<div style="font-size:12px;color:var(--text-dim)">Payment: ${order.paymentMethod.toUpperCase()}</div>` : ''}
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+              <div class="order-total">${fmt(order.totalPrice)}</div>
+              ${canCancel ? `
+                <button class="btn-cancel-order" onclick="openCancelModal('${order._id}')">
+                  🗑️ Cancel Order
+                </button>` : ''}
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function openCancelModal(orderId) {
+    orderToCancel = orderId;
+    document.getElementById('cancel-modal').classList.add('open');
+  }
+
+  function closeCancelModal() {
+    orderToCancel = null;
+    document.getElementById('cancel-modal').classList.remove('open');
+  }
+
+  async function confirmCancel() {
+    if (!orderToCancel) return;
+
+    const btn = document.getElementById('confirm-cancel-btn');
+    btn.disabled = true;
+    btn.textContent = 'Cancelling...';
+
+    try {
+      const res = await fetch(`${API}/orders/${orderToCancel}/cancel`, {
+        method: 'PUT',
+        headers: authHeaders()
+      });
+
+      if (res.ok) {
+        // Animate the card sliding out before removing
+        const card = document.getElementById(`order-${orderToCancel}`);
+        if (card) {
+          card.classList.add('removing');
+          setTimeout(() => {
+            // Update local data
+            const order = allOrders.find(o => o._id === orderToCancel);
+            if (order) order.status = 'cancelled';
+            closeCancelModal();
+            updateOrderCount();
+            renderOrders();
+            toast('Order cancelled and removed from your list. ✅', 'info');
+          }, 350);
+        } else {
+          const order = allOrders.find(o => o._id === orderToCancel);
+          if (order) order.status = 'cancelled';
+          closeCancelModal();
+          updateOrderCount();
+          renderOrders();
+          toast('Order cancelled. ✅', 'info');
+        }
+      } else {
+        const data = await res.json();
+        toast(data.message || 'Failed to cancel order.', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Yes, Cancel It';
+      }
+    } catch {
+      toast('Network error. Please try again.', 'error');
+      btn.disabled = false;
+      btn.textContent = 'Yes, Cancel It';
+    }
+  }
+
+  document.getElementById('cancel-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeCancelModal();
+  });
+
+  loadOrders();
+</script>
+</body>
+</html>

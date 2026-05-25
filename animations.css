@@ -1,0 +1,321 @@
+
+/* ── PAGE TRANSITION ── */
+body {
+  opacity: 1;
+  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.page-enter { opacity: 0; }
+body.page-enter-active { opacity: 1; }
+body.page-exit { opacity: 0; pointer-events: none; }
+/* ── SCROLL REVEAL ── */
+.anim-hidden {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.anim-visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* ── NAVBAR SLIDE DOWN ── */
+.navbar {
+  animation: navSlideDown 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes navSlideDown {
+  from { transform: translateY(-100%); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+
+/* ── HERO CONTENT STAGGER ── */
+.hero-badge {
+  animation: fadeSlideUp 0.6s 0.1s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.hero-title {
+  animation: fadeSlideUp 0.7s 0.2s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.hero-sub {
+  animation: fadeSlideUp 0.6s 0.35s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.hero-actions {
+  animation: fadeSlideUp 0.6s 0.45s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.hero-stats {
+  animation: fadeSlideUp 0.6s 0.55s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── PRODUCT CARD HOVER ── */
+.product-card {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.3s ease !important;
+}
+
+.product-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(240, 165, 0, 0.2);
+}
+
+/* ── FEATURE CARD HOVER ── */
+.feature-card {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.3s ease,
+              box-shadow 0.3s ease !important;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* ── BUTTON ANIMATIONS ── */
+.btn-primary {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease !important;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(240, 165, 0, 0.35);
+}
+
+.btn-primary:active {
+  transform: translateY(0px) scale(0.98);
+}
+
+.btn-cart {
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.btn-cart:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(240, 165, 0, 0.3);
+}
+
+.btn-cart:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+/* ── NAV LINK UNDERLINE ANIMATION ── */
+.nav-links a {
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--primary);
+  border-radius: 2px;
+  transition: width 0.3s ease, left 0.3s ease;
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+  width: 60%;
+  left: 20%;
+}
+
+/* ── ORDER CARD HOVER ── */
+.order-card {
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.order-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+/* ── PROFILE CARD HOVER ── */
+.profile-card {
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.profile-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+/* ── CART ITEM SLIDE IN ── */
+.cart-item {
+  animation: slideInLeft 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+  transition: transform 0.2s ease, opacity 0.2s ease !important;
+}
+
+.cart-item:nth-child(1) { animation-delay: 0.05s; }
+.cart-item:nth-child(2) { animation-delay: 0.10s; }
+.cart-item:nth-child(3) { animation-delay: 0.15s; }
+.cart-item:nth-child(4) { animation-delay: 0.20s; }
+.cart-item:nth-child(5) { animation-delay: 0.25s; }
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── AUTH FORM ANIMATION ── */
+.auth-form-side {
+  animation: fadeSlideUp 0.6s 0.1s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.auth-visual-content {
+  animation: fadeSlideUp 0.7s 0.2s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* ── FORM INPUT FOCUS ANIMATION ── */
+.form-input {
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease !important;
+}
+
+.form-input:focus {
+  transform: scale(1.01);
+  box-shadow: 0 0 0 3px rgba(240, 165, 0, 0.15);
+}
+
+/* ── QTY BUTTON ANIMATION ── */
+.qty-btn {
+  transition: transform 0.15s ease, background 0.2s ease !important;
+}
+
+.qty-btn:hover { transform: scale(1.1); }
+.qty-btn:active { transform: scale(0.9); }
+
+/* ── MODAL ANIMATION ── */
+.modal-overlay {
+  transition: opacity 0.3s ease, visibility 0.3s ease !important;
+}
+
+.modal {
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease !important;
+}
+
+.modal-overlay.open .modal {
+  transform: scale(1) translateY(0) !important;
+}
+
+/* ── PAGE HEADER ── */
+.page-title {
+  animation: fadeSlideUp 0.6s 0.1s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.page-sub {
+  animation: fadeSlideUp 0.6s 0.2s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* ── LOGO HOVER ── */
+.nav-brand {
+  transition: transform 0.2s ease, opacity 0.2s ease !important;
+}
+
+.nav-brand:hover {
+  transform: scale(1.04);
+  opacity: 0.9;
+}
+
+/* ── FOOTER LINKS ── */
+.footer-links a {
+  transition: color 0.2s ease, transform 0.2s ease, padding-left 0.2s ease !important;
+}
+
+.footer-links a:hover {
+  padding-left: 6px;
+}
+
+/* ── TOAST ANIMATION ── */
+.toast {
+  animation: toastIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both !important;
+}
+
+.toast.out {
+  animation: toastOut 0.3s ease forwards !important;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.9); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes toastOut {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to   { opacity: 0; transform: translateY(-10px) scale(0.9); }
+}
+
+/* ── FILTER BUTTON ACTIVE ── */
+.page-btn {
+  transition: background 0.2s ease, color 0.2s ease,
+              transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.page-btn:hover {
+  transform: translateY(-2px);
+}
+
+.page-btn:active {
+  transform: scale(0.96);
+}
+
+/* ── PROFILE AVATAR PULSE ── */
+.profile-avatar {
+  animation: avatarPulse 3s ease-in-out infinite;
+}
+
+@keyframes avatarPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(240, 165, 0, 0.2); }
+  50%       { box-shadow: 0 0 35px rgba(240, 165, 0, 0.4); }
+}
+
+/* ── SKELETON SHIMMER (enhanced) ── */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg3) 25%,
+    rgba(255,255,255,0.06) 50%,
+    var(--bg3) 75%
+  ) !important;
+  background-size: 200% 100% !important;
+  animation: shimmer 1.4s ease-in-out infinite !important;
+}
+
+/* ── WISHLIST HEART ANIMATION ── */
+.product-wishlist {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease !important;
+}
+
+.product-wishlist:hover { transform: scale(1.25); }
+.product-wishlist.active { animation: heartPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+@keyframes heartPop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+/* ── SECTION LABEL ── */
+.section-label {
+  animation: fadeSlideUp 0.5s 0.05s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* ── REDUCE MOTION SUPPORT ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
