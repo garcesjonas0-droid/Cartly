@@ -54,7 +54,7 @@ app.use(passport.session());
 
 /* ================= STATIC FILES ================= */
 // Serve EVERYTHING inside "Frontend" folder
-app.use(express.static(path.join(__dirname, 'Frontend')));
+app.use(express.static(path.join(__dirname, '.')));
 
 /* ================= ROUTES ================= */
 const authRoutes = require('./routes/authRoutes');
@@ -70,14 +70,12 @@ app.use('/api/users', userRoutes);
 /* ================= PAGE ROUTES ================= */
 // Homepage
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'Frontend', 'index.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Profile page
 app.get('/profile', (req, res) => {
-  res.sendFile(path.join(__dirname, 'Frontend', 'profile.html'));
+  res.sendFile(path.join(__dirname, 'profile.html'));
 });
-
 /* ================= ERROR HANDLER ================= */
 app.use((err, req, res, next) => {
   console.error(err.stack);
