@@ -6,6 +6,11 @@
   <title>Cartly — Modern Shopping</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="animations.css">
+  <script>
+    if (!localStorage.getItem('cartly_token')) {
+      window.location.href = 'login.html';
+    }
+  </script>
 </head>
 <body>
 
