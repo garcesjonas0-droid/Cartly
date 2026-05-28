@@ -1,5 +1,4 @@
-const API = 'http://localhost:5000/api';
-
+const API = 'https://cartly-backend.onrender.com/api';
 /* ── AUTH HELPERS ── */
 const getToken = () => localStorage.getItem('cartly_token');
 const getUser = () => JSON.parse(localStorage.getItem('cartly_user') || 'null');

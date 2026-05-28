@@ -1,3 +1,6 @@
+const dns = require('node:dns');
+dns.setServers(['8.8.8.8', '1.1.1.1']); // ─── BYPASSES ISP DNS BLOCKS FOR MONGODB ───
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
