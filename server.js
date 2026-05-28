@@ -54,7 +54,16 @@ app.use(passport.session());
 
 /* ================= STATIC FILES ================= */
 // Serve EVERYTHING inside "Frontend" folder
+// Should be this ✅
 app.use(express.static(path.join(__dirname, '.')));
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/profile', (req, res) => {
+  res.sendFile(path.join(__dirname, 'profile.html'));
+});
 
 /* ================= ROUTES ================= */
 const authRoutes = require('./routes/authRoutes');
