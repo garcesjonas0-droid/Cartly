@@ -196,6 +196,9 @@
 
 <script src="app.js"></script>
 <script>
+  // Redirect to login if not logged in
+   if (!getToken()) { window.location.href = 'login.html'; }
+
   let currentPage = 1;
   let searchTimeout;
 
