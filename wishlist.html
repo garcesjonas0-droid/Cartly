@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Wishlist | Cartly</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="animations.css">
+  <style>
+    .navbar {
+      position: fixed !important;
+      top: 0 !important;
+      width: 100% !important;
+      z-index: 9999 !important;
+    }
+
+    .page-container {
+      padding-top: 100px !important;
+    }
+
+    .wishlist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 8px;
+    }
+
+    .wishlist-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .wishlist-card:hover {
+      border-color: rgba(240,165,0,0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+
+    .wishlist-card.removing {
+      opacity: 0;
+      transform: scale(0.95) translateY(-10px);
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+
+    .wishlist-img {
+      height: 200px;
+      background: var(--bg3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .wishlist-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .wishlist-card:hover .wishlist-img img {
+      transform: scale(1.05);
+    }
+
+    .wishlist-img-placeholder {
+      font-size: 56px;
+      opacity: 0.4;
+    }
+
+    .wishlist-remove {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 34px;
+      height: 34px;
+      background: rgba(255,77,109,0.15);
+      border: 1px solid rgba(255,77,109,0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--error);
+      transition: all 0.2s;
+      backdrop-filter: blur(6px);
+    }
+
+    .wishlist-remove:hover {
+      background: rgba(255,77,109,0.3);
+      transform: scale(1.1);
+    }
+
+    .wishlist-body {
+      padding: 18px;
+    }
+
+    .wishlist-cat {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .wishlist-name {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .wishlist-price {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 16px;
+    }
+
+    .wishlist-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-wishlist-cart {
+      flex: 1;
+      background: var(--primary);
+      color: #000;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-wishlist-cart:hover {
+      background: #fff;
+      transform: translateY(-1px);
+    }
+
+    .wishlist-summary {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .wishlist-summary-info h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .wishlist-summary-info p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .btn-clear-wishlist {
+      background: rgba(255,77,109,0.1);
+      border: 1px solid rgba(255,77,109,0.3);
+      color: var(--error);
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .btn-clear-wishlist:hover {
+      background: rgba(255,77,109,0.2);
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-brand" href="index.html">
+   <img src="./logo.png.png" alt="Cartly" style="height:90px;width:auto;vertical-align:middle;margin-left:100px;">
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#products">Shop</a></li>
+    <li><a href="cart.html">
+      <span class="cart-badge">Cart 🛒<span class="cart-count" style="display:none">0</span></span>
+    </a></li>
+    <li><a href="wishlist.html" class="active">
+      <span class="cart-badge">♥ Wishlist<span class="wishlist-count" style="display:none">0</span></span>
+    </a></li>
+    <li><a href="orders.html">Orders</a></li>
+    <li id="nav-auth"></li>
+  </ul>
+  <button class="hamburger"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="page-container">
+  <div class="page-header" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px">
+    <div>
+      <h1 class="page-title">My Wishlist</h1>
+      <p class="page-sub" id="wishlist-sub">Loading...</p>
+    </div>
+    <a href="index.html#products" class="btn-primary" style="font-size:14px;padding:12px 24px">+ Browse Products</a>
+  </div>
+
+  <div id="wishlist-summary-bar"></div>
+  <div id="wishlist-grid-container"></div>
+</div>
+
+<footer style="padding:30px 5%;background:var(--bg2);border-top:1px solid var(--border)">
+  <div class="footer-bottom" style="border:none;padding:0">
+    <span>© 2026 <strong style="color:var(--primary)">Cartly</strong>. All rights reserved.</span>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+  if (!getToken()) {
+    toast('Please login to view your wishlist 🔐', 'info');
+    setTimeout(() => window.location.href = 'login.html', 1500);
+  }
+
+  function renderWishlist() {
+    const wishlist = getWishlist();
+    const sub = document.getElementById('wishlist-sub');
+    const summaryBar = document.getElementById('wishlist-summary-bar');
+    const container = document.getElementById('wishlist-grid-container');
+
+    sub.textContent = `${wishlist.length} item${wishlist.length !== 1 ? 's' : ''} saved`;
+
+    if (wishlist.length === 0) {
+      summaryBar.innerHTML = '';
+      container.innerHTML = emptyState(
+        '♡',
+        'Your wishlist is empty',
+        'Browse products and click the ♡ heart button to save items here.',
+        'Browse Products →',
+        'index.html#products'
+      );
+      return;
+    }
+
+    summaryBar.innerHTML = `
+      <div class="wishlist-summary">
+        <div class="wishlist-summary-info">
+          <h3>♥ ${wishlist.length} Saved Item${wishlist.length !== 1 ? 's' : ''}</h3>
+          <p>Add them to your cart before they sell out!</p>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn-primary" style="font-size:13px;padding:10px 20px" onclick="addAllToCart()">
+            🛒 Add All to Cart
+          </button>
+          <button class="btn-clear-wishlist" onclick="clearWishlist()">
+            🗑️ Clear All
+          </button>
+        </div>
+      </div>`;
+
+    container.innerHTML = `
+      <div class="wishlist-grid">
+        ${wishlist.map(item => `
+          <div class="wishlist-card" id="wish-${item.id}">
+            <div class="wishlist-img">
+              ${item.image
+                ? `<img src="${item.image}" alt="${item.name}" onerror="this.parentNode.innerHTML='<div class=wishlist-img-placeholder>🛍️</div>'">`
+                : `<div class="wishlist-img-placeholder">🛍️</div>`}
+              <button class="wishlist-remove" onclick="removeWishlistItem('${item.id}')" title="Remove from wishlist">✕</button>
+            </div>
+            <div class="wishlist-body">
+              <div class="wishlist-cat">${item.category || 'Product'}</div>
+              <div class="wishlist-name">${item.name}</div>
+              <div class="wishlist-price">${fmt(item.price)}</div>
+              <div class="wishlist-actions">
+                <button class="btn-wishlist-cart" onclick="addWishlistItemToCart('${item.id}','${item.name}',${item.price})">
+                  🛒 Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>`).join('')}
+      </div>`;
+  }
+
+  function removeWishlistItem(id) {
+    const card = document.getElementById(`wish-${id}`);
+    if (card) {
+      card.classList.add('removing');
+      setTimeout(() => {
+        removeFromWishlist(id);
+        renderWishlist();
+        toast('Removed from wishlist', 'info');
+      }, 300);
+    }
+  }
+
+  function addWishlistItemToCart(id, name, price) {
+    if (!getToken()) {
+      toast('Please login to add to cart 🔐', 'info');
+      return;
+    }
+    let cart = getCart();
+    const existing = cart.find(i => i.id === id);
+    if (existing) existing.quantity += 1;
+    else cart.push({ id, name, price, quantity: 1 });
+    setCart(cart);
+    toast(`${name} added to cart! 🛒`, 'success');
+  }
+
+  function addAllToCart() {
+    if (!getToken()) {
+      toast('Please login to add to cart 🔐', 'info');
+      return;
+    }
+    const wishlist = getWishlist();
+    let cart = getCart();
+    wishlist.forEach(item => {
+      const existing = cart.find(i => i.id === item.id);
+      if (existing) existing.quantity += 1;
+      else cart.push({ id: item.id, name: item.name, price: item.price, quantity: 1 });
+    });
+    setCart(cart);
+    toast(`${wishlist.length} item${wishlist.length !== 1 ? 's' : ''} added to cart! 🛒`, 'success');
+  }
+
+  function clearWishlist() {
+    setWishlist([]);
+    renderWishlist();
+    toast('Wishlist cleared', 'info');
+  }
+
+  renderWishlist();
+</script>
+</body>
+</html>
