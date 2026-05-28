@@ -19,13 +19,13 @@ app.use(helmet({ contentSecurityPolicy: false }));
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: 500,
   message: { message: 'Too many requests, please try again later.' }
 });
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 20,
+  max: 100,
   message: { message: 'Too many auth attempts, please try again later.' }
 });
 
