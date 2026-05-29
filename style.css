@@ -1405,3 +1405,29 @@ body:has(.auth-page) {
   grid-template-columns: 1fr 1fr;
   margin-top: 0;
 }
+/* ── MOBILE FIX ── */
+* { box-sizing: border-box; }
+
+.auth-page {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+.auth-form-side {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  padding: 40px 24px !important;
+}
+
+@media (max-width: 768px) {
+  .auth-visual { display: none; }
+  .auth-page { grid-template-columns: 1fr; }
+  .auth-form-side {
+    padding: 32px 20px !important;
+  }
+  .form-input, .btn-primary, .btn-google {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
