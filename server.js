@@ -106,6 +106,17 @@ mongoose.connect(process.env.MONGO_URI)
 /* ================= SERVER ================= */
 const PORT = process.env.PORT || 5000;
 
+// Keep Render awake on free tier
+const https = require('https');
+setInterval(() => {
+  https.get('https://cartly-b2tu.onrender.com', (res) => {
+    console.log(`Keep-alive ping: ${res.statusCode}`);
+  }).on('error', (err) => {
+    console.log('Keep-alive error:', err.message);
+  });
+}, 14 * 60 * 1000); // every 14 minutes
+
+
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
