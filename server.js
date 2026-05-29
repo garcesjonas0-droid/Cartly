@@ -1,5 +1,5 @@
 const dns = require('node:dns');
-dns.setServers(['8.8.8.8', '1.1.1.1']); // ─── BYPASSES ISP DNS BLOCKS FOR MONGODB ───
+dns.setServers(['8.8.8.8', '1.1.1.1']);
 
 const express = require('express');
 const mongoose = require('mongoose');
@@ -8,10 +8,10 @@ const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const session = require('express-session');
 const path = require('path');
+const https = require('https');
 require('dotenv').config();
 
 const passport = require('./passport');
-
 const app = express();
 
 /* ================= SECURITY ================= */
@@ -57,20 +57,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-/* ================= STATIC FILES ================= */
-// Serve EVERYTHING inside "Frontend" folder
-// Should be this ✅
-app.use(express.static(path.join(__dirname, '.')));
-
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-app.get('/profile', (req, res) => {
-  res.sendFile(path.join(__dirname, 'profile.html'));
-});
-
-/* ================= ROUTES ================= */
+/* ================= ROUTES (API first) ================= */
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 const orderRoutes = require('./routes/orderRoutes');
@@ -81,15 +68,34 @@ app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/users', userRoutes);
 
+/* ================= STATIC FILES (after API routes) ================= */
+app.use(express.static(path.join(__dirname, '.')));
+
 /* ================= PAGE ROUTES ================= */
-// Homepage
 app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'login.html'));
+});
+
+app.get('/home', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.get('/profile', (req, res) => {
   res.sendFile(path.join(__dirname, 'profile.html'));
 });
+
+app.get('/cart', (req, res) => {
+  res.sendFile(path.join(__dirname, 'cart.html'));
+});
+
+app.get('/orders', (req, res) => {
+  res.sendFile(path.join(__dirname, 'orders.html'));
+});
+
+app.get('/wishlist', (req, res) => {
+  res.sendFile(path.join(__dirname, 'wishlist.html'));
+});
+
 /* ================= ERROR HANDLER ================= */
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -103,20 +109,17 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('✅ MongoDB connected'))
   .catch(err => console.log('❌ MongoDB error:', err.message));
 
-/* ================= SERVER ================= */
-const PORT = process.env.PORT || 5000;
-
-// Keep Render awake on free tier
-const https = require('https');
+/* ================= KEEP ALIVE ================= */
 setInterval(() => {
   https.get('https://cartly-b2tu.onrender.com', (res) => {
     console.log(`Keep-alive ping: ${res.statusCode}`);
   }).on('error', (err) => {
     console.log('Keep-alive error:', err.message);
   });
-}, 14 * 60 * 1000); // every 14 minutes
+}, 14 * 60 * 1000);
 
-
+/* ================= SERVER ================= */
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
