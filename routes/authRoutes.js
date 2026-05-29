@@ -26,11 +26,11 @@ router.put('/me', verifyToken, [
 // Google OAuth routes
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 router.get('/google/callback',
-  passport.authenticate('google', { failureRedirect: 'http://127.0.0.1:5500/login.html' }),
+  passport.authenticate('google', { failureRedirect: 'https://cartly-b2tu.onrender.com/login.html' }),
   (req, res) => {
     const token = req.user.token;
     const user = encodeURIComponent(JSON.stringify(req.user.user));
-    res.redirect(`http://127.0.0.1:5500/login.html?token=${token}&user=${user}`);
+    res.redirect(`https://cartly-b2tu.onrender.com/login.html?token=${token}&user=${user}`);
   }
 );
 
