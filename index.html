@@ -262,7 +262,7 @@
                 <div class="product-price">${fmt(p.price)}</div>
                 <div class="product-stock">${p.stock > 0 ? `${p.stock} in stock` : 'Unavailable'}</div>
               </div>
-              <button class="btn-cart" onclick="event.stopPropagation(); addToCart('${p._id}','${p.name}',${p.price})"
+             <button class="btn-cart" onclick="event.stopPropagation(); addToCart('${p._id}','${p.name}',${p.price},'${p.image||''}')"
                 ${p.stock === 0 ? 'disabled' : ''}>
                 🛒 Add
               </button>
@@ -288,21 +288,19 @@
     el.innerHTML = html;
   }
 
-  function viewProduct(id) {}
-
-  function addToCart(id, name, price) {
-    if (!getToken()) {
-      toast('Please login to add items to cart 🔐', 'info');
-      setTimeout(() => window.location.href = 'login.html', 1500);
-      return;
-    }
-    let cart = getCart();
-    const existing = cart.find(i => i.id === id);
-    if (existing) existing.quantity += 1;
-    else cart.push({ id, name, price, quantity: 1 });
-    setCart(cart);
-    toast(`${name} added to cart! 🛒`, 'success');
+function addToCart(id, name, price, image) {
+  if (!getToken()) {
+    toast('Please login to add items to cart 🔐', 'info');
+    setTimeout(() => window.location.href = 'login.html', 1500);
+    return;
   }
+  let cart = getCart();
+  const existing = cart.find(i => i.id === id);
+  if (existing) existing.quantity += 1;
+  else cart.push({ id, name, price, image: image || '', quantity: 1 });
+  setCart(cart);
+  toast(`${name} added to cart! 🛒`, 'success');
+}
 
   document.getElementById('search-input').addEventListener('input', () => {
     clearTimeout(searchTimeout);

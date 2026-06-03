@@ -7,96 +7,52 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="animations.css">
   <style>
-    /* ── DARK PAYMENT DROPDOWN ── */
     #payment-method {
       background: black !important;
       color: var(--text) !important;
       border: 1px solid var(--bg3) !important;
       cursor: pointer;
     }
-
     #payment-method option {
       background: var(--bg1) !important;
       color: var(--text) !important;
-      padding: 10px;
     }
-
     #payment-method:focus {
       border-color: var(--primary) !important;
       outline: none;
     }
-
-    /* ── FILTER BUTTONS RESIZED ── */
-    .order-filters {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 24px;
-    }
-
-    .filter-btn {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 16px;
-      border-radius: 50px;
-      border: 1px solid var(--bg3);
-      background: var(--bg2);
-      color: var(--text-muted);
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-family: inherit;
-      white-space: nowrap;
-    }
-
-    .filter-btn:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-    }
-
-    .filter-btn.active {
-      background: var(--primary);
-      color: #000;
-      border-color: var(--primary);
-    }
-
-    /* ── QTY BUTTONS ── */
     .qty-btn {
       width: 32px !important;
       height: 32px !important;
       font-size: 16px !important;
       border-radius: 8px !important;
     }
-
     .remove-btn {
       font-size: 16px !important;
       padding: 6px 10px !important;
     }
+    .modal { background: var(--bg2) !important; }
+    .modal-overlay { backdrop-filter: blur(4px); }
 
-    /* ── MODAL ── */
-    .modal {
-      background: var(--bg2) !important;
-    }
-
-    .modal-overlay {
-      backdrop-filter: blur(4px);
-    }
+    /* ── NAVBAR LOGO FIX ── */
+    .navbar { position: fixed !important; top: 0 !important; width: 100% !important; z-index: 9999 !important; }
+    .page-container { padding-top: 100px !important; }
   </style>
 </head>
 <body>
 
 <nav class="navbar">
   <a class="nav-brand" href="index.html">
-    <img src="./logo.png.png" alt="Cartly" style="height:90px;width:auto;vertical-align:middle;margin-left:100px;">
-    
+    <img src="./logo.png" alt="Cartly" style="height:52px;width:auto;vertical-align:middle;margin-right:4px;">
   </a>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
     <li><a href="index.html#products">Shop</a></li>
     <li><a href="cart.html" class="active">
       <span class="cart-badge">Cart 🛒<span class="cart-count" style="display:none">0</span></span>
+    </a></li>
+    <li><a href="wishlist.html">
+      <span class="cart-badge">♥ Wishlist<span class="wishlist-count" style="display:none">0</span></span>
     </a></li>
     <li><a href="orders.html">Orders</a></li>
     <li id="nav-auth"></li>
@@ -109,11 +65,9 @@
     <h1 class="page-title">Your Cart</h1>
     <p class="page-sub" id="cart-subtitle">Loading your items...</p>
   </div>
-
   <div id="cart-main"></div>
 </div>
 
-<!-- Checkout Modal -->
 <div class="modal-overlay" id="checkout-modal">
   <div class="modal">
     <div class="modal-header">
@@ -169,7 +123,7 @@
 
     if (cart.length === 0) {
       document.getElementById('cart-subtitle').textContent = '0 items';
-      main.innerHTML = emptyState('🛒', 'Your cart is empty', 'Looks like you haven\'t added anything yet.', 'Start Shopping →', 'index.html#products');
+      main.innerHTML = emptyState('🛒', 'Your cart is empty', "Looks like you haven't added anything yet.", 'Start Shopping →', 'index.html#products');
       return;
     }
 
@@ -183,7 +137,9 @@
           ${cart.map((item, idx) => `
             <div class="cart-item" id="cart-item-${idx}">
               <div class="cart-item-img">
-                ${item.image ? `<img src="${item.image}" alt="${item.name}">` : '🛍️'}
+                ${item.image
+                  ? `<img src="${item.image}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;" onerror="this.parentNode.innerHTML='🛍️'">`
+                  : '🛍️'}
               </div>
               <div class="cart-item-info">
                 <div class="cart-item-name">${item.name}</div>
@@ -205,7 +161,6 @@
             </a>
           </div>
         </div>
-
         <div class="cart-summary">
           <div class="summary-title">Order Summary</div>
           <div class="summary-row"><span>${count} item${count>1?'s':''}</span><span>${fmt(total)}</span></div>
@@ -260,14 +215,11 @@
         <div style="color:var(--error);font-size:14px;margin-bottom:12px">❌ Please enter your delivery address.</div>`;
       return;
     }
-
     const cart = getCart();
     const total = cart.reduce((s, i) => s + i.price * i.quantity, 0);
     const products = cart.map(i => ({ product: i.id, quantity: i.quantity }));
-
     const btn = document.getElementById('confirm-btn');
     btn.disabled = true; btn.textContent = 'Placing order...';
-
     try {
       const res = await fetch(`${API}/orders`, {
         method: 'POST',
